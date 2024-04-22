@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {    
+    "keyVaultName": {
+      "value": "kv-ca-as"
+    },
+    "objectId": {
+      "value": "d1a2b3c4-5d6e-7f8g-9h0i-1j2k3l4m5n6"
+    }    
+  }
+}
