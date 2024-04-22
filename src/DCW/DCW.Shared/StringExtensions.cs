@@ -7,6 +7,18 @@ namespace DCW.Shared;
 public static class StringExtensions
 {
     /// <summary>
+    /// throws exception if null of empty
+    /// </summary>
+    /// <param name="input">null, empty or not empty string</param>
+    public static void ThrowIfNullOrEmpty(this string? input)
+    {
+        if (string.IsNullOrEmpty(input))
+            ArgumentException.ThrowIfNullOrEmpty(input,nameof(input));
+        if (string.IsNullOrWhiteSpace(input))
+            ArgumentException.ThrowIfNullOrWhiteSpace(input,nameof(input));
+    }
+    
+    /// <summary>
     /// truncating string with number of chars by endchar
     /// </summary>
     /// <param name="original">original string</param>
