@@ -1,0 +1,47 @@
+﻿@page "{query?}"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexPageModel
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/User/Profile">My profile</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Events
+        </li>
+    </ol>
+}
+
+<h2>Audit events</h2>
+
+<p class="text-info">Found @Model.AuditEvents.Count results.</p>
+
+@if (Model.AuditEvents.Any())
+{
+    <table class="table table-light">
+        <thead class="table-dark">
+        <tr>
+            <th>Source IP</th>
+            <th>Destination IP</th>
+            <th>Message (if any)</th>
+        </tr>
+        </thead>
+        @foreach (var commonSecurityLogModel in Model.AuditEvents)
+        {
+            <td>@commonSecurityLogModel.SourceIp</td>
+            <td>@commonSecurityLogModel.DestinationIp</td>
+            <td>@commonSecurityLogModel.Message</td>
+        }
+    </table>
+}
+else
+{
+    <p class="text-info">There is no data available. Check data (usually it takes 20 mins to digest the data).</p>
+}

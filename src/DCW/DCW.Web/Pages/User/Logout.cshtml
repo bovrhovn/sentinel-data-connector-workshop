@@ -1,0 +1,16 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LogoutPageModel
+
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<h1>Do you want to log out?</h1>
+
+<p>You won't be able to access search over your data, administration and configuration of your data.</p>
+
+<form method="post">
+    <button type="submit" class="btn btn-lg btn-danger">I understand, log me out!</button>
+</form>
+

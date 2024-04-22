@@ -1,0 +1,44 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AddPageModel
+
+@{
+    ViewData["Title"] = "Add event";
+}
+
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/User/Profile">My profile</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-page="/Events/Index">Events</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Add data to custom table
+        </li>
+    </ol>
+}
+
+<h2>Enter message and send data to custom table</h2>
+<div class="row">
+    <div class="col">
+        <form enctype="multipart/form-data"
+              method="post">
+            <div class="mb-3">
+                <label asp-for="EventModel.Message" class="form-label">Message</label>
+                <input asp-for="EventModel.Message"
+                       class="form-control"
+                       type="text">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary mr-3 mt-2 "
+                        type="submit">
+                    Generate data <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

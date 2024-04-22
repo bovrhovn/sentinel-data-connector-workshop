@@ -1,0 +1,29 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model NotificationsPageModel
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+@section breadcrumb
+{
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-page="/User/Profile">My profile</a>
+        </li>
+        <li aria-current="page"
+            class="breadcrumb-item active">
+            Notifications
+        </li>
+    </ol>
+}
+
+@if (Model.UserSettings!.AllowNotifications)
+{
+    <h3>Notifications search</h3>
+}
+else
+{
+    <p class="text-alert">You have disabled notifications. To enable notifications, go to <a asp-page="/User/Profile">My profile</a> and enable notifications.</p>
+}

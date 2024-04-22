@@ -1,0 +1,35 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexPageModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h3>Welcome to the Audit Service website</h3>
+<p class="text-info">
+    Audit data is the information that is collected and analyzed by auditors to provide audit evidence and support audit opinions.
+    Audit data in IT can include:
+</p>
+<ul>
+    <li>System logs, configuration files, and performance metrics that show how the IT systems are functioning and operating.</li>
+    <li>Network traffic, firewall rules, and access logs that show how the IT systems are communicating and protecting data.</li>
+    <li>User accounts, passwords, permissions, and roles that show who has access to the IT systems and data and what they can do with them.</li>
+    <li>Backup and recovery plans, disaster recovery tests, and incident reports that show how the IT systems and data are protected and restored in case of emergencies.</li>
+    <li>Policies, procedures, standards, and guidelines that show how the IT systems and data are managed and governed.</li>
+</ul>
+<p class="text-info">
+    This application is a client application that is used to view and set the configuration to get data from different sources.
+</p>
+<p class="text-info">This client application contains:</p>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <a asp-page="/Events/Index">Data collection information</a>
+    </li>
+    <li class="list-group-item">Data transformation information and status of that data</li>
+    <li class="list-group-item">
+        <a asp-page="/User/Profile">Customization options</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-page="/User/Notification">Alert and notifications subscription and configuration</a>
+    </li>
+</ul>

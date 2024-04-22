@@ -1,0 +1,35 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model GeneratePageModel
+
+@{
+    ViewData["Title"] = "Generate data";
+}
+
+<h3>Generate data</h3>
+
+<div class="row">
+    <div class="col">
+        <form enctype="multipart/form-data"
+              method="post">
+            <div class="mb-3">
+                <label asp-for="GenerateOptions.RecordNumber" class="form-label">How many records</label>
+                <input asp-for="GenerateOptions.RecordNumber"
+                       class="form-control"
+                       type="number">
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" asp-for="GenerateOptions.IsPersistent">
+                <label class="form-check-label" asp-for="GenerateOptions.IsPersistent">
+                    Is persistent state
+                </label>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary mr-3 mt-2 "
+                        type="submit">
+                    Generate data <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

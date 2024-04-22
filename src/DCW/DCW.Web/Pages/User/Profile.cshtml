@@ -1,0 +1,65 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ProfilePageModel
+
+@{
+    var name = User.Identity?.Name;
+    ViewData["Title"] = $"Profile {name}";
+}
+
+<h2>Settings options for @name</h2>
+
+<div class="row">
+    <div class="col">
+        <form enctype="multipart/form-data"
+              method="post">
+            <div class="mb-3">
+                <label asp-for="UserSettings.DataFrequencyRetrievalInSeconds" class="form-label">Data retrieval frequency (in seconds)</label>
+                <input asp-for="UserSettings.DataFrequencyRetrievalInSeconds"
+                       class="form-control"
+                       type="number">
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" asp-for="UserSettings.AllowNotifications">
+                <label class="form-check-label" asp-for="UserSettings.AllowNotifications">
+                    Allow notifications
+                </label>
+            </div>
+            <div class="mb-3">
+                <label asp-for="UserSettings.DefaultRecordSize" class="form-label">Default record size</label>
+                <input asp-for="UserSettings.DefaultRecordSize"
+                       class="form-control"
+                       type="number">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary mr-3 mt-2 "
+                        type="submit">
+                    Save changes <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        <div class="card text-bg-light mb-3">
+            <div class="card-header">Check additional information</div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li>
+                        <a class="card-link"
+                           asp-page="/User/MySubscriptions"
+                           target="_blank">
+                            Other useful link
+                        </a>
+                    </li>
+                    <li>
+                        <a class="card-link"
+                           href="https://www.azure.com"
+                           target="_blank">
+                            Data collections
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

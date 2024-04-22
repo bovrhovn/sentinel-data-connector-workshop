@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <NoDefaultLaunchSettingsFile>True</NoDefaultLaunchSettingsFile>
+    </PropertyGroup>    
+    <ItemGroup>
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
+        <PackageReference Include="Azure.Data.Tables" Version="12.8.2" />
+        <PackageReference Include="Azure.Identity" Version="1.10.4" />
+        <PackageReference Include="Azure.Monitor.Ingestion" Version="1.1.1" />
+        <PackageReference Include="Azure.Monitor.Query" Version="1.2.0" />
+        <PackageReference Include="Bogus" Version="35.4.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\DCW.Interfaces\DCW.Interfaces.csproj" />
+      <ProjectReference Include="..\DCW.Shared\DCW.Shared.csproj" />
+    </ItemGroup>
+</Project>
