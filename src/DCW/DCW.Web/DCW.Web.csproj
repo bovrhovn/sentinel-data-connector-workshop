@@ -16,7 +16,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Properties\" />
-      <Folder Include="wwwroot\js\" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\DCW.Models\DCW.Models.csproj" />
