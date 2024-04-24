@@ -21,7 +21,7 @@ public class AuditEventHttpService
         this.logger = logger;
     }
 
-    public async Task<PaginatedList<AuditEvent>> GetAlarmsAsync(int page = 1, string query = "")
+    public async Task<List<AuditEvent>> GetAlarmsAsync(string query = "")
     {
         var response =
             await httpClient.GetAsync(
@@ -42,7 +42,7 @@ public class AuditEventHttpService
             throw new Exception("Error getting alarms from service");
         }
 
-        if (string.IsNullOrEmpty(query)) return new PaginatedList<AuditEvent>(alarms, alarms.Count, page, 20, query);
+        if (string.IsNullOrEmpty(query)) return alarms;
 
         logger.LogInformation("Filtering alarms with query {Query}", query);
         alarms = alarms.Where(currentData => currentData.Message.Contains(query))
@@ -50,10 +50,10 @@ public class AuditEventHttpService
         logger.LogInformation("After filtering alarms with query {Query} --> {AlarmCount} results", query,
             alarms.Count);
 
-        return new PaginatedList<AuditEvent>(alarms, alarms.Count, page, 20, query);
+        return alarms;
     }
 
-    public async Task<PaginatedList<AuditEventFile>> GetFilesAsync(int page = 1, string query = "")
+    public async Task<List<AuditEventFile>> GetFilesAsync(string query = "")
     {
         var response =
             await httpClient.GetAsync(
@@ -75,7 +75,7 @@ public class AuditEventHttpService
         }
 
         if (string.IsNullOrEmpty(query))
-            return new PaginatedList<AuditEventFile>(filesResult, filesResult.Count, page, 20, query);
+            return filesResult;
 
         logger.LogInformation("Filtering files with query {Query}", query);
         filesResult = filesResult.Where(currentData => currentData.Message.Contains(query))
@@ -83,7 +83,7 @@ public class AuditEventHttpService
         logger.LogInformation("After filtering files with query {Query} --> {AlarmCount} results", query,
             filesResult.Count);
 
-        return new PaginatedList<AuditEventFile>(filesResult, filesResult.Count, page, 20, query);
+        return filesResult;
     }
 
     public async Task<bool> GenerateAsync(GenerateOptions generateOptions)

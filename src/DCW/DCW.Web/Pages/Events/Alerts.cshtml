@@ -24,29 +24,90 @@
 
 <h3>Alerts</h3>
 
-<div class="container">
-    <input aria-label="search term"
-           class="form-control"
-           hx-get
-           hx-indicator="#indicator"
-           hx-swap="outerHtml"
-           hx-target="#grid"
-           hx-trigger="keyup changed delay:300ms"
-           id="tbQuery"
-           name="query"
-           value="@Model.Query"
-           placeholder="enter search term to get the results"
-           type="text">
-    <div class="row mt-2">
-        @await Html.PartialAsync("_AlarmResult", Model.AlarmModel)
-        <img alt="tail spin"
-             class="htmx-indicator"
-             id="indicator"
-             src="~/svg-loaders/tail-spin.svg">
+<<div id="app">
+    <div class="form-floating mb-3">
+        <input type="search" class="form-control" id="tbQuery"
+               tabindex="0"
+               autofocus v-on:keyup.enter="callSearchAPI" v-model="query" placeholder="I want to search with this terms">
+        <label for="tbQuery">Enter search term search the files</label>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4" v-if="searchResults.length">
+        <v-data-table :items="searchResults"
+                      item-value="auditEventId"
+                      :headers="headers">
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td>{{ item.message }}</td>
+                    <td class="text-center">{{ item.timeStamp }}</td>
+                    <td>{{ item.sourceIp }}</td>
+                    <td class="text-center">{{ item.destinationIp }}</td>
+                </tr>
+            </template>
+        </v-data-table>
+    </div>
+    <div class="text-info" v-else>
+        <div v-if="isLoading">
+            Loading data from the server...
+        </div>
+        <div v-else>
+            No data has been retrieved.
+        </div>
     </div>
 </div>
 
 @section Scripts
 {
-    @await Html.PartialAsync("_HtmxScripts")
+    @await Html.PartialAsync("_VueJs")
+    @await Html.PartialAsync("_Vuetify")
+
+    <script>
+        const { createApp,ref } = Vue;
+        const { createVuetify } = Vuetify;
+        const vuetify = createVuetify();
+        const query = ref('');   
+        let isLoading = ref(false);
+        let searchResults = ref([]);
+        const headers= [
+            { title: 'Message', key: 'message', align: 'start'},
+            { title: 'Created At', key: 'timeStamp',align: 'center' },
+            { title: 'From IP ', key: 'sourceIp' },
+            { title: 'To ip',  key: 'destinationIp',align: 'center' }            
+        ];
+        createApp({
+        setup() {        
+          return {
+            query,
+            callSearchAPI,
+            searchResults,
+            isLoading,
+            headers
+          }
+        }
+      }).mount('#app')
+      
+      function callSearchAPI(e) {
+        console.log('searching with ' + query);
+        const value = e.target.value.trim()        
+        if (value) {            
+          isLoading.value = true;
+          let searchUrl = '@Url.Page("Alerts", "Filter")' + "&query=" + value;
+          console.log("Search url is " + searchUrl);  
+          fetch(searchUrl)
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              searchResults.value = data;
+            });
+          isLoading.value = false;
+        }
+        else {
+          searchResults.value = [];
+        }
+      }           
+    </script>
+}
+
+@section Head
+{
+    @await Html.PartialAsync("_VuetifyStyles")
 }
