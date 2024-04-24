@@ -38,7 +38,7 @@ builder.Services.AddHttpClient<SecurityEventsHttpService>()
         policyBuilder.WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)));
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection(SettingsNameHelper.AzureAdSectionName));
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection(SettingsNameHelper.AzureAdSettingsName));
 
 builder.Services.AddControllers();
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>

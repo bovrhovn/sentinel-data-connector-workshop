@@ -18,6 +18,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\DCW.Interfaces\DCW.Interfaces.csproj" />
+      <ProjectReference Include="..\DCW.Services.Azure\DCW.Services.Azure.csproj" />
       <ProjectReference Include="..\DCW.Shared\DCW.Shared.csproj" />
     </ItemGroup>
 </Project>
