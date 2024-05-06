@@ -1,9 +1,11 @@
+using System.Net;
 using DCW.Shared;
 using DCW.Web.Options;
 using DCW.Web.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -61,6 +63,22 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
+
+app.UseExceptionHandler(options =>
+{
+    options.Run(async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        context.Response.ContentType = "application/json";
+        var exception = context.Features.Get<IExceptionHandlerFeature>();
+        if (exception != null)
+        {
+            var message = $"{exception.Error.Message}";
+            await context.Response.WriteAsync(message).ConfigureAwait(false);
+        }
+    });
+});
+
 app.MapHealthChecks("/health", new HealthCheckOptions
 {
     Predicate = _ => true,

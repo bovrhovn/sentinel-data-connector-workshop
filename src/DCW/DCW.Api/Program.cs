@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json.Serialization;
 using DCW.Api.Authentication;
 using DCW.Api.Options;
@@ -5,6 +6,7 @@ using DCW.Interfaces;
 using DCW.Services.Azure;
 using DCW.Shared;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 
@@ -69,7 +71,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionHandler(options =>
+{
+    options.Run(async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        context.Response.ContentType = "application/json";
+        var exception = context.Features.Get<IExceptionHandlerFeature>();
+        if (exception != null)
+        {
+            var message = $"{exception.Error.Message}";
+            await context.Response.WriteAsync(message).ConfigureAwait(false);
+        }
+    });
+});
 app.UseRouting();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseEndpoints(endpoints =>

@@ -5,11 +5,36 @@ using Microsoft.Azure.Management.OperationalInsights.Models;
 using Microsoft.Rest;
 using Spectre.Console;
 
+#nullable disable
+
 AnsiConsole.Write(new FigletText("Generate table").Centered().Color(Color.Red));
 
-var subscriptionId = Environment.GetEnvironmentVariable("SubscriptionId");
-var resourceGroupName = Environment.GetEnvironmentVariable("ResourceGroupName");
-var workspaceName = Environment.GetEnvironmentVariable("WorkspaceName");
+# region Environment variables
+
+var subscriptionId = Environment.GetEnvironmentVariable("SubscriptionId") ?? string.Empty;
+if (subscriptionId == string.Empty)
+{
+    AnsiConsole.Write(new Markup("[red]SubscriptionId[/] is not set in the environment variables"));
+    AnsiConsole.WriteLine();
+    return;
+}
+var resourceGroupName = Environment.GetEnvironmentVariable("ResourceGroupName") ?? string.Empty;
+if (resourceGroupName == string.Empty)
+{
+    AnsiConsole.Write(new Markup("[red]ResourceGroupName[/] is not set in the environment variables"));
+    AnsiConsole.WriteLine();
+    return;
+}
+var workspaceName = Environment.GetEnvironmentVariable("WorkspaceName") ?? string.Empty;
+if (workspaceName == string.Empty)
+{
+    AnsiConsole.Write(new Markup("[red]WorkspaceName[/] is not set in the environment variables"));
+    AnsiConsole.WriteLine();
+    return;
+}
+
+#endregion
+
 var tableName = AnsiConsole.Prompt(
     new TextPrompt<string>("Enter [green]TABLE name[/] (add _CL on the end)?")
         .PromptStyle("red"));
