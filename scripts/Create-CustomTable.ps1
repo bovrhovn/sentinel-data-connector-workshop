@@ -2,7 +2,7 @@
 
 # .SYNOPSIS
 
-creates custom table in Log Analytics workspace
+creates custom table in Log Analytics workspace with the currently signed in user
 
 .DESCRIPTION
  
@@ -10,8 +10,8 @@ Creates custom table in Log Analytics workspace
   
 .EXAMPLE
 
-PS > .\Create-CustomTable.ps1 -ResourceGroupName "rg-ca" -TableName "MyTable" -WorkspaceName "MyWorkspace" -SubscriptionId "00000000-0000-0000-0000-000000000000"
-create custom table in Log Analytics workspace
+PS > .\Create-CustomTable.ps1 -ResourceGroupName "rg-sdc" -TableName "MyTable" -WorkspaceName "MyWorkspace"
+create custom table in Log Analytics workspace MyWorkspace in resource group rg-sdc with the name MyTable
  
 . LINK
 
@@ -19,12 +19,12 @@ https://learn.microsoft.com/en-us/azure/azure-monitor/agents/data-collection-tex
  
 #>
 param(
-    [Parameter(Mandatory = $true,HelpMessage  = "Resource group name")]
-    $ResourceGroupName = "rg-ca",
-    [Parameter(Mandatory = $true,HelpMessage  = "Custom table name (without CL)")]
-    $TableName,
-    [Parameter(Mandatory = $true,HelpMessage  = "Workspace name")]
-    $WorkspaceName
+    [Parameter(HelpMessage  = "Resource group name")]
+    $ResourceGroupName = "rg-sdc",
+    [Parameter(HelpMessage  = "Custom table name (without CL)")]
+    $TableName = "MyTable",
+    [Parameter(HelpMessage  = "Workspace name")]
+    $WorkspaceName = "law-sdc"
 )
 Write-Output "Creating custom table $TableName in $WorkspaceName in group $ResourceGroupName"
 $tableParams = @'
@@ -37,6 +37,10 @@ $tableParams = @'
               "totalRetentionInDays": 70,
               "columns": [
                    {
+                      "name": "TimeGenerated",
+                      "type": "datetime"
+                    },
+                    {
                       "name": "DateCreated",
                       "type": "datetime"
                     },
@@ -69,6 +73,7 @@ $tableParams = @'
 $tableParams = $tableParams.Replace("#TABLE#", $TableName)
 Write-Output "Table params: $tableParams"
 $context = Get-AzContext
+Write-Verbose "Context: $context"
 $subscription = $context.Subscription.Name
 Write-Output "Subscription: $subscription in resource group $ResourceGroupName"
 $subId= $context.Subscription.Id
@@ -76,5 +81,13 @@ Write-Output "Subscription ID: $subId"
 $path="//subscriptions/$subId/resourcegroups/$ResourceGroupName/providers/microsoft.operationalinsights/workspaces/$WorkspaceName/tables/#TABLENAME#_CL?api-version=2022-10-01"
 $path = $path.Replace("#TABLENAME#", $TableName)
 Write-Output "Path: $path"
-Invoke-AzRestMethod -Path $path -Method PUT -payload $tableParams -ContentType "application/json" -UseBasicParsing
-Write-Output "$TableName in $WorkspaceName in group $ResourceGroupName has been created"
+try
+{
+    Invoke-AzRestMethod -Path $path -Method PUT -payload $tableParams -Verbose
+    Write-Output "$TableName in $WorkspaceName in group $ResourceGroupName has been created"
+}
+catch
+{
+    Write-Output "Failed to create $TableName in $WorkspaceName in group $ResourceGroupName"
+    Write-Output $_.Exception.Message
+}

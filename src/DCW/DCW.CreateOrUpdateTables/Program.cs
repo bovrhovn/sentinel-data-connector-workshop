@@ -70,6 +70,11 @@ var table = new Microsoft.Azure.Management.OperationalInsights.Models.Table
         {
             new Column
             {
+                Name = "TimeGenerated",
+                Type = "dateTime"
+            }
+            , new Column
+            {
                 Name = "DateCreated",
                 Type = "dateTime"
             },
@@ -96,7 +101,7 @@ var table = new Microsoft.Azure.Management.OperationalInsights.Models.Table
             new Column
             {
                 Name = "AuditEventId",
-                Type = "guid"
+                Type = "string"
             }
         }
     }
@@ -113,6 +118,5 @@ catch (Exception e)
 {
     AnsiConsole.WriteException(e);
 }
-
 
 AnsiConsole.WriteLine("Done with execution.... exiting....");

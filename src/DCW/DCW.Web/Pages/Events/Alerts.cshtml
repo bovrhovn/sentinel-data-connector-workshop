@@ -24,7 +24,7 @@
 
 <h3>Alerts</h3>
 
-<<div id="app">
+<div id="app">
     <div class="form-floating mb-3">
         <input type="search" class="form-control" id="tbQuery"
                tabindex="0"
@@ -32,18 +32,23 @@
         <label for="tbQuery">Enter search term search the files</label>
     </div>
     <div class="row row-cols-1 row-cols-md-2 g-4" v-if="searchResults.length">
-        <v-data-table :items="searchResults"
-                      item-value="auditEventId"
-                      :headers="headers">
-            <template v-slot:item="{ item }">
-                <tr>
-                    <td>{{ item.message }}</td>
-                    <td class="text-center">{{ item.timeStamp }}</td>
-                    <td>{{ item.sourceIp }}</td>
-                    <td class="text-center">{{ item.destinationIp }}</td>
-                </tr>
-            </template>
-        </v-data-table>
+        <div class="col" v-for="currentSearchTerm in searchResults" :key="currentSearchTerm.auditEventId">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ currentSearchTerm.timeStamp }}</h5>
+                    <p class="card-text">{{ currentSearchTerm.message }}</p>
+                    <p class="card-text">
+                        <small class="text-body-secondary">
+                            Generated at: {{ currentSearchTerm.timeStamp }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    Source: {{ currentSearchTerm.sourceIp }} - Destination: {{ currentSearchTerm.destinationIp }}
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="text-info" v-else>
         <div v-if="isLoading">

@@ -26,7 +26,6 @@ public class AuditEventApiController(
     IOptions<AzureAdOptions> azureOptionsValue,
     IAuditEventService auditEventService) : ControllerBase
 {
-    
     [HttpGet]
     [Route(ConstantRouteHelper.HealthRoute)]
     [AllowAnonymous]
@@ -35,7 +34,7 @@ public class AuditEventApiController(
         logger.LogInformation("Checking health at {DateCreated}", DateTime.Now);
         return Ok($"I am healthy at {DateTime.Now}");
     }
-    
+
     [HttpGet]
     [Route(ConstantRouteHelper.GetEventsRoute + "/{resultCount}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -70,13 +69,21 @@ public class AuditEventApiController(
         logger.LogInformation("Setting up data query for events at {DateCreated}", DateTime.Now);
         Response<LogsBatchQueryResultCollection> queryResponse = await logsQueryClient.QueryBatchAsync(batch);
         logger.LogInformation("Query called at {DateCreated}", DateTime.Now);
-
-        var count = queryResponse.Value.GetResult<int>(countQueryId).Single();
-        logger.LogInformation("Received {Count} events at {DateCreated}", count, DateTime.Now);
-        var topEntries = queryResponse.Value.GetResult<AuditEvent>(data);
-        logger.LogInformation("Returning {Count} events at {DateCreated}", topEntries.Count, DateTime.Now);
-        var eventData = topEntries.ToList();
-        return Ok(eventData);
+        var list = new List<AuditEvent>();
+        try
+        {
+            var count = queryResponse.Value.GetResult<int>(countQueryId).Single();
+            if (count == 0) return Ok(list);
+            logger.LogInformation("Received {Count} events at {DateCreated}", count, DateTime.Now);
+            var topEntries = queryResponse.Value.GetResult<AuditEvent>(data);
+            logger.LogInformation("Returning {Count} events at {DateCreated}", topEntries.Count, DateTime.Now);
+            list = topEntries.ToList();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e.Message);
+        }
+        return Ok(list);
     }
 
     [HttpPost]
@@ -208,7 +215,7 @@ public class AuditEventApiController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Produces(typeof(AuditEventFile))]
-    [ServiceFilter(typeof(ApiKeyAuthFilter))]
+    // [ServiceFilter(typeof(ApiKeyAuthFilter))]
     public async Task<IActionResult> GetFilesAsync()
     {
         logger.LogInformation("Calling Azure Table Storage for files at {DateCreated}", DateTime.Now);

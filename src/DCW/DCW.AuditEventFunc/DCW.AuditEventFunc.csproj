@@ -26,6 +26,7 @@
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\DCW.Models\DCW.Models.csproj" />
       <ProjectReference Include="..\DCW.Shared\DCW.Shared.csproj" />
     </ItemGroup>
     <ItemGroup>

@@ -120,7 +120,15 @@ public class AuditEventTableService(string tableName, string connectionString) :
         try
         {
             await serviceClient.CreateIfNotExistsAsync();
-            await serviceClient.SubmitTransactionAsync(actions);
+            var count = 0;
+            do
+            {
+                var range = new Range(count, count + 100);
+                var currentInsertBatch = actions.Take(range);
+                if (currentInsertBatch.Any())
+                    await serviceClient.SubmitTransactionAsync(currentInsertBatch);
+                count+= 100;
+            } while (actions.Count >= count);
         }
         catch (Exception e)
         {
