@@ -28,6 +28,7 @@
     <table class="table table-light">
         <thead class="table-dark">
         <tr>
+            <th>Audit ID</th>
             <th>Source IP</th>
             <th>Destination IP</th>
             <th>Message (if any)</th>
@@ -35,9 +36,12 @@
         </thead>
         @foreach (var commonSecurityLogModel in Model.AuditEvents)
         {
-            <td>@commonSecurityLogModel.SourceIp</td>
-            <td>@commonSecurityLogModel.DestinationIp</td>
-            <td>@commonSecurityLogModel.Message</td>
+            <tr>
+                <td>@commonSecurityLogModel.AuditEventId</td>
+                <td>@commonSecurityLogModel.SourceIp</td>
+                <td>@commonSecurityLogModel.DestinationIp</td>
+                <td>@commonSecurityLogModel.Message</td>
+            </tr>
         }
     </table>
 }

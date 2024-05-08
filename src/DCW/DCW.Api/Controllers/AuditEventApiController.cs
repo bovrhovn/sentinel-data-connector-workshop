@@ -7,6 +7,7 @@ using Azure.Monitor.Query;
 using Azure.Monitor.Query.Models;
 using Bogus;
 using DCW.Api.Authentication;
+using DCW.Api.Models;
 using DCW.Api.Options;
 using DCW.Interfaces;
 using DCW.Models;
@@ -72,12 +73,19 @@ public class AuditEventApiController(
         var list = new List<AuditEvent>();
         try
         {
-            var count = queryResponse.Value.GetResult<int>(countQueryId).Single();
+            var count = queryResponse.Value.GetResult<long>(countQueryId).Single();
             if (count == 0) return Ok(list);
             logger.LogInformation("Received {Count} events at {DateCreated}", count, DateTime.Now);
-            var topEntries = queryResponse.Value.GetResult<AuditEvent>(data);
+            var topEntries = queryResponse.Value.GetResult<AuditEventViewModel>(data);
             logger.LogInformation("Returning {Count} events at {DateCreated}", topEntries.Count, DateTime.Now);
-            list = topEntries.ToList();
+            list = topEntries.Select(currentEntry => new AuditEvent
+            {
+                AuditEventId = currentEntry.AuditEventId,
+                Message = currentEntry.Message,
+                SourceIp = currentEntry.SourceIp,
+                DestinationIp = currentEntry.DestinationIp,
+                TimeStamp = currentEntry.TimeStamp
+            }).ToList();
         }
         catch (Exception e)
         {
