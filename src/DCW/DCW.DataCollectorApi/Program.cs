@@ -28,7 +28,7 @@ if (string.IsNullOrEmpty(sharedKey))
 }
 
 // LogName is name of the event type that is being submitted to Azure Monitor
-var LogName = "DemoExample";
+var tableName = "DemoCato";
 
 // Create a hash for the API signature
 var datestring = DateTime.UtcNow.ToString("r");
@@ -38,7 +38,7 @@ var hashedString = BuildSignature(stringToHash, sharedKey);
 var signature = "SharedKey " + customerId + ":" + hashedString;
 
 //post the data
-await PostData(signature, datestring, json, LogName, string.Empty, customerId);
+await PostData(signature, datestring, json, tableName, string.Empty, customerId);
 
 AnsiConsole.WriteLine("Press any key to exit");
 

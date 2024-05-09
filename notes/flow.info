@@ -2,13 +2,19 @@
 
 1. Demonstrate Azure Sentinel Data Collectors - how to configure them, how to enable them and how to use them
 
-2. Demonstrate the Azure Sentinel Github - explain the process here (https://github.com/Azure/Azure-Sentinel/tree/master/Solutions#guide-to-building-microsoft-sentinel-solutions) and where to start (depends on what you want to do: https://github.com/Azure/Azure-Sentinel/wiki#get-started-now)
+2. Demonstrate the Azure Sentinel Github - explain the process here 
+(https://github.com/Azure/Azure-Sentinel/tree/master/Solutions#guide-to-building-microsoft-sentinel-solutions) 
+and where to start (depends on what you want to do: https://github.com/Azure/Azure-Sentinel/wiki#get-started-now)
 
-3. Show different methods of connecting to data (https://learn.microsoft.com/en-us/azure/sentinel/create-custom-connector#compare-custom-connector-methods) and what you need to do to connect - demonstrate the logic app and powershell as an example with log analytics API
+3. Show different methods of connecting to data 
+(https://learn.microsoft.com/en-us/azure/sentinel/create-custom-connector#compare-custom-connector-methods) 
+and what you need to do to connect - demonstrate the logic app and powershell as an example with log analytics API
 
-4. Move to custom connectors with serverless approach and code (to demonstrate how to leverage calls to our own API) - show the coded solution and explain what is needed to make this to happen.
+4. Move to custom connectors with serverless approach and code (to demonstrate how to leverage calls to our own API) 
+- show the coded solution and explain what is needed to make this to happen.
 
-5. Demonstrate how what needs to be done in Partner Center to publish the solution (check solution template - https://learn.microsoft.com/en-us/partner-center/marketplace/plan-azure-app-solution-template).
+5. Demonstrate how what needs to be done in Partner Center to publish the solution 
+(check solution template - https://learn.microsoft.com/en-us/partner-center/marketplace/plan-azure-app-solution-template).
 
 6. Explain the procedure to be added in Azure Sentinel and what tools to use:
 	
@@ -33,6 +39,9 @@ Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/sentinel/create-
 
 -- Microsoft Monitoring Agent
 Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agents-overview"
+
+-- Basic and Analytics log data plans
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-configure?tabs=portal-1"
 
 -- Log Analytics Workspace Access
 Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/manage-access?tabs=portal#log-analytics-contributor"
