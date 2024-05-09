@@ -1,0 +1,89 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "loganalyticsworkspace": "law-sdc",
+    "dce-name": "dce-sdc",
+    "dcr-name": "dcr-sdc",    
+    "stream-name": "Custom-Bob_CL",
+    "location":"swedencentral"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/dataCollectionEndpoints",
+      "apiVersion": "2022-06-01",
+      "name": "[variables('dce-name')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "networkAcls": {
+          "publicNetworkAccess": "Enabled"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Insights/dataCollectionRules",
+      "apiVersion": "2022-06-01",
+      "name": "[variables('dcr-name')]",
+      "location": "[variables('location')]",
+      "tags": {
+        "createdBy": "Sentinel"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dce-name'))]"
+      ],
+      "properties": {
+        "dataCollectionEndpointId": "[resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dce-name'))]",
+        "streamDeclarations": {
+          "Custom-Bob_CL": {
+            "columns": [
+              {
+                "name": "AuditEventId",
+                "type": "string"
+              },
+              {
+                "name": "TimeGenerated",
+                "type": "datetime"
+              },
+              {
+                "name": "SourceIP",
+                "type": "string"
+              },
+              {
+                "name": "DestinationIP",
+                "type": "string"
+              },
+              {
+                "name": "Message",
+                "type": "string"
+              },
+              {
+                "name": "EventType",
+                "type": "int"
+              }
+            ]
+          }
+        },
+        "destinations": {
+          "logAnalytics": [
+            {
+              "name": "loganalyticsworkspacename",
+              "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/Workspaces', variables('loganalyticsworkspace'))]"
+            }
+          ]
+        },
+        "dataFlows": [
+          {
+            "streams": [
+              "[variables('stream-name')]"
+            ],
+            "destinations": [
+              "loganalyticsworkspacename"
+            ],
+            "transformKql": "source",
+            "outputStream": "[variables('stream-name')]"
+          }
+        ]
+      }
+    }
+  ]
+}
