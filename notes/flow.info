@@ -1,0 +1,91 @@
+### Flow information
+
+1. Demonstrate Azure Sentinel Data Collectors - how to configure them, how to enable them and how to use them
+
+2. Demonstrate the Azure Sentinel Github - explain the process here (https://github.com/Azure/Azure-Sentinel/tree/master/Solutions#guide-to-building-microsoft-sentinel-solutions) and where to start (depends on what you want to do: https://github.com/Azure/Azure-Sentinel/wiki#get-started-now)
+
+3. Show different methods of connecting to data (https://learn.microsoft.com/en-us/azure/sentinel/create-custom-connector#compare-custom-connector-methods) and what you need to do to connect - demonstrate the logic app and powershell as an example with log analytics API
+
+4. Move to custom connectors with serverless approach and code (to demonstrate how to leverage calls to our own API) - show the coded solution and explain what is needed to make this to happen.
+
+5. Demonstrate how what needs to be done in Partner Center to publish the solution (check solution template - https://learn.microsoft.com/en-us/partner-center/marketplace/plan-azure-app-solution-template).
+
+6. Explain the procedure to be added in Azure Sentinel and what tools to use:
+	
+   a. https://github.com/Azure/Azure-Sentinel/tree/master/Tools/Create-Azure-Sentinel-Solution/V2
+   
+7. leverage best practices in Azure to demonstrate what to be aware of.
+
+### Helper commands in Azure PWSH
+
+- Get-AzContext -- get signed in user details
+- get-azroleassignment -ExpandPrincipalGroups -SignInName "bojan@beyondlocalhost.tech" | Format-Table RoleDefinitionName,Scope  -- get roles associated with signed in user
+- Get-AzResource -ResourceGroupName "rg-sdc" -- get resources in resource group
+- New-AzResourceGroupDeployment -ResourceGroupName rg-sdc -TemplateFile .\StreamDeployment.json -Verbose
+
+### Links
+
+-- Github workshop page
+Start-Process "msedge" "https://github.com/bovrhovn/sentinel-data-connector-workshop"
+
+-- Custom Azure Sentinel Connector
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/sentinel/create-custom-connector#compare-custom-connector-methods"
+
+-- Microsoft Monitoring Agent
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agents-overview"
+
+-- Log Analytics Workspace Access
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/manage-access?tabs=portal#log-analytics-contributor"
+
+-- AzAdvertizer - RBAC, policies, initiatives
+Start-Process "msedge" "https://www.azadvertizer.net/"
+
+-- Data Collector API
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api?tabs=powershell"
+
+-- Log Ingestion API
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview"
+
+-- Data Collection Rule Helper
+Start-Process "msedge" "https://github.com/KnudsenMorten/AzLogDcrIngestPS?tab=readme-ov-file#introduction"
+
+-- Azure Sentinel GitHub
+Start-Process "msedge" "https://github.com/Azure/Azure-Sentinel"
+
+-- Azure Sentinel Solution Template
+Start-Process "msedge" "https://learn.microsoft.com/en-us/partner-center/marketplace/plan-azure-app-solution-template"
+
+-- Best practices with Data Collection
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/sentinel/best-practices-data"
+
+-- Azure Governance Visualizer
+Start-Process "msedge" "https://github.com/vrhovnik/Azure-MG-Sub-Governance-Reporting/tree/master"
+
+### KQL
+
+--- Kusto Query Language reference
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/"
+
+--- transformation
+source
+| extend TimeGenerated = todatetime(Time)
+| parse RawData with 
+ClientIP:string
+' ' *
+' ' *
+' [' * '] "' RequestType:string
+' ' Resource:string
+' ' *
+'" ' ResponseCode:int
+' ' *
+| project-away Time, RawData
+| where ResponseCode != 200
+
+---- workbook
+
+DemoExample_CL | where TimeGenerated > ago(1d) // Adjust the time range as needed
+| summarize Count = count() by bin(TimeGenerated, 1h), DemoField1_s // Group by time and your field
+| render timechart
+
+-- Best Practices for KQL
+Start-Process "msedge" "https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/best-practices"
